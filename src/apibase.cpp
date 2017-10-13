@@ -232,7 +232,11 @@ QNetworkReply *APIBase::patch(QUrl url)
     QNetworkRequest request = createRequest(url);
     setRawHeaders(&request);
 
-    QNetworkReply *reply = manager->sendCustomRequest(request,"PATCH");
+    QBuffer *buff = new QBuffer;
+    buff->setData(data);
+    buff->open(QIODevice::ReadOnly);
+    QNetworkReply *reply = manager->sendCustomRequest(request,"PATCH", buff);
+    buff->setParent(reply);
     connectReplyToErrors(reply);
     return reply;
 }

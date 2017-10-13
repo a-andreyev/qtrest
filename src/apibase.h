@@ -72,7 +72,7 @@ protected:
     QNetworkReply *deleteResource(QUrl url);
     QNetworkReply *head(QUrl url);
     QNetworkReply *options(QUrl url);
-    QNetworkReply *patch(QUrl url);
+    QNetworkReply *patch(QUrl url, const QByteArray &data);
 
     QNetworkAccessManager *manager;
 
