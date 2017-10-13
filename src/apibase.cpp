@@ -1,6 +1,7 @@
 #include "apibase.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QBuffer>
 
 APIBase::APIBase(QObject *parent) : QObject(parent), m_acceptHeader("Accept"), m_authTokenHeader("Authorization")
 {
@@ -227,7 +228,7 @@ QNetworkReply *APIBase::options(QUrl url)
     return reply;
 }
 
-QNetworkReply *APIBase::patch(QUrl url)
+QNetworkReply *APIBase::patch(QUrl url, const QByteArray &data)
 {
     QNetworkRequest request = createRequest(url);
     setRawHeaders(&request);
@@ -235,9 +236,10 @@ QNetworkReply *APIBase::patch(QUrl url)
     QBuffer *buff = new QBuffer;
     buff->setData(data);
     buff->open(QIODevice::ReadOnly);
+
     QNetworkReply *reply = manager->sendCustomRequest(request,"PATCH", buff);
-    buff->setParent(reply);
     connectReplyToErrors(reply);
+    buff->setParent(reply);
     return reply;
 }
 
